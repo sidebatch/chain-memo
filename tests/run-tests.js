@@ -14,6 +14,27 @@ ok(html.includes("homeSummary") && html.includes("renderSummary"), "홈 전체 �
 ok(html.includes("todayBtn") && html.includes("오늘의 단계로 바로 가기"), "체인 상세 오늘의 단계 바로가기 존재");
 ok(html.includes("stuckView") && html.includes("stuckList") && html.includes("막힌 줄 모아보기"), "막힌 줄 모아보기 화면 존재");
 ok(html.includes("collectStuck") && html.includes("renderStuck") && html.includes("stuckEntry"), "막힌 줄 수집·렌더 로직 존재");
+ok(html.includes("function judge(") && html.includes("거의 맞음") && html.includes("악센트만 확인"), "3단계 판정 judge·거의 맞음·악센트 표시 존재");
+ok(html.includes("almost"), "거의 맞음 스타일·상태 존재");
+
+// judge 기능 테스트 (JUDGE_START~END 순수 함수 블록 추출)
+const scriptForJudge = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+const block = scriptForJudge.match(/\/\*JUDGE_START\*\/([\s\S]*?)\/\*JUDGE_END\*\//);
+ok(!!block, "JUDGE 블록 존재");
+if (block) {
+  const api = new Function(block[1] + "; return {judge};")();
+  const J = api.judge;
+  ok(J("I work as a cook.", "I work as a cook.").tier === "ok", "judge: 정확 입력 정답");
+  ok(J("I work as a cook in a restaurant.", "I work as cook in a restaurant.").tier === "almost", "judge: 관사 누락 거의 맞음");
+  ok(J("Je vois le train.", "Je vois la train.").tier === "almost", "judge: 관사 교체 거의 맞음");
+  ok(J("We stayed in a guesthouse near the beach.", "We stayed in a guesthous near the beach.").tier === "almost", "judge: 철자 1자 오타 거의 맞음");
+  ok(J("I like coffee in the morning.", "I like tea in the morning.").tier === "stuck", "judge: 단어 교체는 막힘");
+  const acc = J("Je vais à la gare.", "Je vais a la gare.");
+  ok(acc.tier === "ok" && acc.detail && acc.detail.kind === "accent", "judge: 악센트만 다르면 정답+악센트 표시");
+  ok(J("Bonjour, je voudrais un café.", "").tier === "stuck", "judge: 빈 입력은 막힘");
+  const sp = J("We stayed in a guesthouse near the beach.", "We stayed in a guesthous near the beach.");
+  ok(sp.detail && sp.detail.pos === 5 && /guesthouse/.test(sp.detail.word), "judge: 거의 맞음은 다른 단어 위치·원형만 표시");
+}
 
 // 임베드 스크립트 문법 검사
 const m = html.match(/<script>([\s\S]*?)<\/script>/);
