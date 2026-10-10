@@ -16,6 +16,9 @@ ok(html.includes("stuckView") && html.includes("stuckList") && html.includes("�
 ok(html.includes("collectStuck") && html.includes("renderStuck") && html.includes("stuckEntry"), "막힌 줄 수집·렌더 로직 존재");
 ok(html.includes("function judge(") && html.includes("거의 맞음") && html.includes("악센트만 확인"), "3단계 판정 judge·거의 맞음·악센트 표시 존재");
 ok(html.includes("almost"), "거의 맞음 스타일·상태 존재");
+ok(html.includes("ttsBar") && html.includes("ttsRates") && html.includes("ttsVoiceStatus"), "발음 속도 조절 바·음성 상태 표시 존재");
+ok(html.includes("ttsNotice") && html.includes("음성이 이 기기에 없어서"), "언어 음성 없을 때 안내 존재");
+ok(html.includes("TTS_RATES") && html.includes("pickVoiceFromList") && html.includes("getTtsRate"), "TTS 속도·음성 선택 로직 존재");
 
 // judge 기능 테스트 (JUDGE_START~END 순수 함수 블록 추출)
 const scriptForJudge = html.match(/<script>([\s\S]*?)<\/script>/)[1];
@@ -34,6 +37,32 @@ if (block) {
   ok(J("Bonjour, je voudrais un café.", "").tier === "stuck", "judge: 빈 입력은 막힘");
   const sp = J("We stayed in a guesthouse near the beach.", "We stayed in a guesthous near the beach.");
   ok(sp.detail && sp.detail.pos === 5 && /guesthouse/.test(sp.detail.word), "judge: 거의 맞음은 다른 단어 위치·원형만 표시");
+}
+
+// TTS 순수 함수 테스트 (TTS_START~END 블록 추출 — DOM 의존 함수는 제외하고 상수·순수 함수만 평가)
+const ttsBlockM = scriptForJudge.match(/\/\*TTS_START\*\/([\s\S]*?)\/\*TTS_END\*\//);
+ok(!!ttsBlockM, "TTS 블록 존재");
+if (ttsBlockM) {
+  const pureSrc = ttsBlockM[1].split("let ttsVoices")[0];
+  const storeStub = "const store={settings:{}}; function save(){};";
+  const tapi = new Function(storeStub + pureSrc + "; return {pickVoiceFromList, clampRate, getTtsRate, setTtsRate, voiceStatusFromList, ttsLangTag};")();
+  const VS = [
+    { lang: "en-US", name: "Samantha" },
+    { lang: "fr-CA", name: "Amelie" },
+    { lang: "ko-KR", name: "Yuna" }
+  ];
+  ok(tapi.pickVoiceFromList(VS, "en").lang === "en-US", "TTS: 정확한 en-US 음성 선택");
+  ok(tapi.pickVoiceFromList(VS, "fr").lang === "fr-CA", "TTS: fr-FR 없으면 같은 언어 fr-CA로 폴백");
+  ok(tapi.pickVoiceFromList([{ lang: "ko-KR", name: "Yuna" }], "fr") === null, "TTS: 해당 언어 음성 없으면 null");
+  ok(tapi.pickVoiceFromList([], "en") === null, "TTS: 음성 목록 비면 null");
+  const st = tapi.voiceStatusFromList(VS);
+  ok(st.en === true && st.fr === true, "TTS: 음성 상태 en·fr 모두 있음 판정");
+  const st2 = tapi.voiceStatusFromList([{ lang: "en-GB", name: "Daniel" }]);
+  ok(st2.en === true && st2.fr === false, "TTS: 음성 상태 fr 없음 판정");
+  ok(tapi.clampRate(0.75) === 0.75 && tapi.clampRate(1.05) === 1.05 && tapi.clampRate(9) === 0.92 && tapi.clampRate(undefined) === 0.92, "TTS: 속도 값은 3단계로만 제한, 기본 0.92");
+  tapi.setTtsRate(0.75);
+  ok(tapi.getTtsRate() === 0.75, "TTS: 설정한 속도 저장·복원");
+  ok(tapi.ttsLangTag("fr") === "fr-FR" && tapi.ttsLangTag("en") === "en-US", "TTS: 언어 태그 매핑");
 }
 
 // 임베드 스크립트 문법 검사
