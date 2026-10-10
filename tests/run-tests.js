@@ -10,6 +10,8 @@ const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
 ok(!html.includes("__APP_JS__") && !html.includes("__CHAIN_B64__"), "토큰 전부 치환됨");
 ok(html.includes('localStorage') && html.includes("chainmemo-v1"), "저장 키 chainmemo-v1 존재");
 ok(fs.existsSync(path.join(ROOT, "sw.js")), "sw.js 존재");
+ok(html.includes("homeSummary") && html.includes("renderSummary"), "홈 전체 진도 요약 존재");
+ok(html.includes("todayBtn") && html.includes("오늘의 단계로 바로 가기"), "체인 상세 오늘의 단계 바로가기 존재");
 
 // 임베드 스크립트 문법 검사
 const m = html.match(/<script>([\s\S]*?)<\/script>/);
