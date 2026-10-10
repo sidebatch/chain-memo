@@ -12,6 +12,8 @@ ok(html.includes('localStorage') && html.includes("chainmemo-v1"), "저장 키 c
 ok(fs.existsSync(path.join(ROOT, "sw.js")), "sw.js 존재");
 ok(html.includes("homeSummary") && html.includes("renderSummary"), "홈 전체 진도 요약 존재");
 ok(html.includes("todayBtn") && html.includes("오늘의 단계로 바로 가기"), "체인 상세 오늘의 단계 바로가기 존재");
+ok(html.includes("stuckView") && html.includes("stuckList") && html.includes("막힌 줄 모아보기"), "막힌 줄 모아보기 화면 존재");
+ok(html.includes("collectStuck") && html.includes("renderStuck") && html.includes("stuckEntry"), "막힌 줄 수집·렌더 로직 존재");
 
 // 임베드 스크립트 문법 검사
 const m = html.match(/<script>([\s\S]*?)<\/script>/);
