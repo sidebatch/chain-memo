@@ -19,6 +19,13 @@ ok(html.includes("almost"), "거의 맞음 스타일·상태 존재");
 ok(html.includes("ttsBar") && html.includes("ttsRates") && html.includes("ttsVoiceStatus"), "발음 속도 조절 바·음성 상태 표시 존재");
 ok(html.includes("ttsNotice") && html.includes("음성이 이 기기에 없어서"), "언어 음성 없을 때 안내 존재");
 ok(html.includes("TTS_RATES") && html.includes("pickVoiceFromList") && html.includes("getTtsRate"), "TTS 속도·음성 선택 로직 존재");
+ok(html.includes("prefers-reduced-motion") && html.includes("scroll-behavior:auto"), "reduced-motion 대응 존재");
+ok(html.includes(":focus-visible") && html.includes("outline:3px solid"), "키보드 focus 표시 존재");
+ok(html.includes(".chip{") && html.includes("min-height:44px"), "칩 터치 영역 44px 이상");
+ok(html.includes(".tbtn{") && html.includes("min-height:44px"), "작은 버튼 터치 영역 44px 이상");
+ok(html.includes('aria-pressed') && html.includes('aria-live="polite"') && html.includes("문장 입력"), "aria 상태·라이브 영역·입력 라벨 존재");
+ok(html.includes("--sub:#59544a") && html.includes("prefers-contrast"), "본문 보조 텍스트 대비 강화·고대비 대응 존재");
+ok(html.includes("touch-action:manipulation") && html.includes("safe-area-inset-bottom"), "모바일 터치·세이프에어리어 대응 존재");
 
 // judge 기능 테스트 (JUDGE_START~END 순수 함수 블록 추출)
 const scriptForJudge = html.match(/<script>([\s\S]*?)<\/script>/)[1];
