@@ -5,7 +5,7 @@
 
 ## 콘텐츠 확장 (주제 다양화)
 1. ~~IELTS Speaking Part 1 체인 3종 (hometown / work & study / free time) — 일상 구어체~~ ✅ 완료 2026-10-10 · v0.2.0 (체인 3개·24줄 추가, 전체 17개·132줄)
-2. IELTS Writing Task 2 체인 2종 (discussion형, 문제·해결형) — 격식 학술체, 개요→본론 구조
+2. ~~IELTS Writing Task 2 체인 2종 (discussion형, 문제·해결형) — 격식 학술체, 개요→본론 구조~~ ✅ 완료 2026-10-10 · v0.3.0 (체인 2개·18줄 추가, 전체 19개·150줄)
 3. OPIc 체인 3종 (집·동네 묘사 / 여가·취미 / 기억에 남는 경험 서술) — 구어 스토리텔링
 4. TEF EO-A 체인 2종 (수업 문의 / 숙소 예약 문의) — vous 격식, 카테고리 질문 뱅크
 5. TEF EE-A 체인 1종 (fait divers 다른 소재) + EE-B 체인 1종 (다른 주제 공식 편지)
