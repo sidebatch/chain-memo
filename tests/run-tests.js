@@ -11,7 +11,7 @@ ok(!html.includes("__APP_JS__") && !html.includes("__CHAIN_B64__"), "토큰 전�
 ok(html.includes('localStorage') && html.includes("chainmemo-v1"), "저장 키 chainmemo-v1 존재");
 ok(fs.existsSync(path.join(ROOT, "sw.js")), "sw.js 존재");
 ok(html.includes("homeSummary") && html.includes("renderSummary"), "홈 전체 진도 요약 존재");
-ok(html.includes("todayBtn") && html.includes("이어서 학습하기"), "체인 상세 이어서 학습하기 바로가기 존재");
+ok(html.includes("todayBtn") && html.includes("가리고 쓰기"), "체인 상세 가리고 쓰기 바로가기 존재");
 ok(html.includes("promptbox") && html.includes("시험 문제"), "라이팅 시험 문제 표시 박스 존재");
 ok(html.includes("stuckView") && html.includes("stuckList") && html.includes("막힌 줄 모아보기"), "막힌 줄 모아보기 화면 존재");
 ok(html.includes("collectStuck") && html.includes("renderStuck") && html.includes("stuckEntry"), "막힌 줄 수집·렌더 로직 존재");
